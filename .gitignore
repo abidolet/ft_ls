@@ -1,0 +1,10 @@
+*
+!includes
+!*.h
+!libft
+!srcs
+!srcs/exec
+!srcs/parsing
+!*.c
+!Makefile
+!.gitignore

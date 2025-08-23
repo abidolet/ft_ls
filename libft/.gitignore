@@ -1,0 +1,17 @@
+*
+!includes
+!includes/libft
+!srcs
+!srcs/algo
+!srcs/gnl
+!srcs/is
+!srcs/lst
+!srcs/math
+!srcs/mem
+!srcs/printf
+!srcs/str
+!srcs/to
+!Makefile
+!*.c
+!*.h
+!.gitignore
