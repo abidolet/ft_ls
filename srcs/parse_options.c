@@ -58,7 +58,7 @@ static e_option get_option_gnu(const char *option_name)
 	return (option);
 }
 
-static e_option get_option_posix(const char *option_name)
+static e_option get_option_posix(const char option_name)
 {
 	t_option_map_posix option_map[] =
 	{
@@ -70,7 +70,7 @@ static e_option get_option_posix(const char *option_name)
 
 	for (size_t i = 0; option_map[i].posix_form; i++)
 	{
-		if (option_map[i].posix_form == option_name[0])
+		if (option_map[i].posix_form == option_name)
 		{
 			return (option_map[i].option);
 		}
@@ -87,7 +87,7 @@ void	parse_options(char *arg, int *options)
 	{
 		while (*arg)
 		{
-			option = get_option_posix(arg);
+			option = get_option_posix(*arg);
 			if (option == INVALID)
 			{
 				dprintf(2, INVALID_OPTION_MSG, *arg);
@@ -95,7 +95,7 @@ void	parse_options(char *arg, int *options)
 			}
 			else if (option == HELP)
 			{
-				dprintf(2, HELP_MSG);
+				dprintf(1, HELP_MSG);
 				exit(0);
 			}
 
@@ -113,7 +113,7 @@ void	parse_options(char *arg, int *options)
 		}
 		else if (option == HELP)
 		{
-			dprintf(2, HELP_MSG);
+			dprintf(1, HELP_MSG);
 			exit(0);
 		}
 

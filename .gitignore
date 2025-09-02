@@ -7,4 +7,5 @@
 !srcs/parsing
 !*.c
 !Makefile
+!tester
 !.gitignore

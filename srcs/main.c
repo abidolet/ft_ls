@@ -6,6 +6,5 @@ int	main(int argc, char **argv)
 
 	parse(argc, argv, &data);
 	run(&data);
-	free_all(&data);
 	return (data.exit_code);
 }

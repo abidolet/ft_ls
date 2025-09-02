@@ -1,12 +1,35 @@
 #include "ft_ls.h"
 #include <string.h>
 
+int	sort_paths_time_reverse(void *s1, void *s2)
+{
+	return (sort_paths_time(s2, s1));
+}
+
+int	sort_paths_time(void *s1, void *s2)
+{
+	t_info	*p1 = s1;
+	t_info	*p2 = s2;
+
+	if (p1->st.st_mtim.tv_sec != p2->st.st_mtim.tv_sec)
+	{
+		return (p2->st.st_mtim.tv_sec - p1->st.st_mtim.tv_sec);
+	}
+	else if (p1->st.st_mtim.tv_nsec != p2->st.st_mtim.tv_nsec)
+	{
+		return (p2->st.st_mtim.tv_nsec - p1->st.st_mtim.tv_nsec);
+	}
+	return (sort_paths(s1, s2));
+}
+
+int	sort_paths_reverse(void *s1, void *s2)
+{
+	return (sort_paths(s2, s1));
+}
+
 int	sort_paths(void *s1, void *s2)
 {
-	const char *p1 = (void *)s1;
-	const char *p2 = (void *)s2;
-
-	return (ft_strcmp(p1, p2));
+	return (ft_strcmp(((t_info *)s1)->name, ((t_info *)s2)->name));
 }
 
 void	free_all(t_data *data)
