@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mem.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 22:15:17 by abidolet          #+#    #+#             */
-/*   Updated: 2025/07/06 15:20:39 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/09/04 22:13:02 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memmove(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
-void	*realloc(void *ptr, size_t size);
+void	*ft_realloc(void *ptr, size_t size);
+void    ft_nothing(void *ptr);
 
 #endif

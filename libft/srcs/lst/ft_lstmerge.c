@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_lstmerge.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 23:10:36 by abidolet          #+#    #+#             */
-/*   Updated: 2025/09/05 14:15:18 by abidolet         ###   ########.fr       */
+/*   Created: 2025/09/03 00:00:00 by abidolet          #+#    #+#             */
+/*   Updated: 2025/09/03 00:00:00 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/lst.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+t_list *ft_lstmerge(t_list *a, t_list *b)
 {
-	if (f)
-	{
-		while (lst)
-		{
-			f(lst->content);
-			lst = lst->next;
-		}
-	}
+    if (!a)
+        return (b);
+    ft_lstlast(a)->next = b;
+    return (a);
 }

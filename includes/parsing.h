@@ -3,33 +3,32 @@
 
 # include "ft_ls.h"
 
+# define TRY_MSG "Try '" EXEC_NAME " --help' for more information.\n"
+# define INVALID_OPTION_MSG	EXEC_NAME ": invalid option -- '%c'\n" TRY_MSG
+# define UNRECOGNIZED_OPTION_MSG EXEC_NAME ": unrecognized option -- '%s'\n" TRY_MSG
+# define AMBIGUOUS_OPTION_MSG EXEC_NAME ": option '--%s' is ambiguous; possibilities:"
+
 # define HELP_MSG \
 	"Usage: " EXEC_NAME " [OPTION]... [FILE]...\n" \
 	"List information about the FILEs (the current directory by default).\n" \
-	"Sort entries alphabetically if none of -ftu is specified.\n" \
-	"\nMandatory arguments to long options are mandatory for short options too.\n" \
-	"  -a, --all\t\t\tdo not ignore entries starting with .\n" \
+	"Sort entries alphabetically if none of -t is specified.\n" \
+	"\n  -a, --all\t\t\tdo not ignore entries starting with .\n" \
 	"  -l\t\t\t\tuse a long listing format\n" \
 	"  -r, --reverse\t\t\treverse order while sorting\n" \
 	"  -R, --recursive\t\tlist subdirectories recursively\n" \
 	"  -t\t\t\t\tsort by time, newest first\n" \
-	"      --help\t\t\tdisplay this help and exit\n" \
+	"      --help\t\tdisplay this help and exit\n" \
 	"\nExit status:\n" \
 	" 0  if OK,\n" \
 	" 1  if minor problems (e.g., cannot access subdirectory),\n" \
 	" 2  if serious trouble (e.g., cannot access command-line argument).\n" \
 	"\nReport bugs to <abidolet@student.42lyon.fr>.\n" \
 
-# define TRY_MSG "Try '" EXEC_NAME " --help' for more information.\n"
-# define INVALID_OPTION_MSG	EXEC_NAME ": invalid option -- '%c'\n" TRY_MSG
-# define UNRECOGNIZED_OPTION_MSG EXEC_NAME ": unrecognized option -- '%s'\n" TRY_MSG
-# define AMBIGUOUS_OPTION_MSG EXEC_NAME ": option '--%s' is ambiguous; possibilities:"
-
-#define OPTIONS_TABLE \
-	X(ALL, 'a', "all") \
+# define OPTIONS_TABLE \
 	X(LONG, 'l', "\0") \
-	X(REVERSE, 'r', "reverse") \
 	X(RECURSIVE, 'R', "recursive") \
+	X(ALL, 'a', "all") \
+	X(REVERSE, 'r', "reverse") \
 	X(TIME, 't', "\0") \
 	X(HELP, '\0', "help") \
 

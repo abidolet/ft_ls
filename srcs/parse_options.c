@@ -1,4 +1,3 @@
-#include "parsing.h"
 #include <stdlib.h>
 
 #if LIBFT_AUTHORIZED
@@ -17,6 +16,16 @@
 
 #endif
 
+#if BONUS
+
+# include "parsing_bonus.h"
+
+#else
+
+# include "parsing.h"
+
+#endif
+
 static e_option get_option_gnu(const char *option_name)
 {
 	const size_t	option_size = strlen(option_name);
@@ -28,10 +37,9 @@ static e_option get_option_gnu(const char *option_name)
 		#define X(name, posix, gnu) {name, gnu, 0},
 			OPTIONS_TABLE
 		#undef X
-		{INVALID, NULL, 0}
 	};
 
-	for (size_t i = 0; option_map[i].gnu_form; i++)
+	for (size_t i = 0; i < sizeof(option_map) / sizeof(option_map[0]); i++)
 	{
 		if (strncmp(option_name, option_map[i].gnu_form, option_size) == 0)
 		{
@@ -65,10 +73,9 @@ static e_option get_option_posix(const char option_name)
 		#define X(name, posix, gnu) {name, posix},
 			OPTIONS_TABLE
 		#undef X
-		{INVALID, 0}
 	};
 
-	for (size_t i = 0; option_map[i].posix_form; i++)
+	for (size_t i = 0; i < sizeof(option_map) / sizeof(option_map[0]); i++)
 	{
 		if (option_map[i].posix_form == option_name)
 		{
@@ -103,6 +110,14 @@ void	parse_options(char *arg, int *options)
 			arg++;
 		}
 	}
+
+	#if BONUS
+	else if (ft_strchr(arg, '='))
+	{
+		parse_color(arg, options);
+	}
+	#endif
+
 	else
 	{
 		option = get_option_gnu(arg + 1);

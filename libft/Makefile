@@ -11,11 +11,6 @@ ifeq ($(MODE), debug)
 	CFLAGS += -g3
 endif
 
-ifeq ($(MODE), x86_32)
-	CC = gcc
-	CFLAGS = -MD $(INCLUDES) -m32
-endif
-
 VPATH = srcs:srcs/is:srcs/mem:srcs/str:srcs/to:srcs/lst:srcs/math:srcs/algo:srcs/printf:srcs/gnl
 
 SRCS_ALGO =	ft_sort_int_tab.c	\
@@ -51,6 +46,7 @@ SRCS_LST =	ft_lstadd_back.c	\
 			ft_lstreverse.c		\
 			ft_lstsize.c		\
 			ft_lstsort.c		\
+			ft_lstmerge.c		\
 
 SRCS_MATH =	ft_abs.c			\
 			ft_clamp.c			\
@@ -71,6 +67,7 @@ SRCS_MEM =	ft_bzero.c			\
 			ft_memcpy.c			\
 			ft_memmove.c		\
 			ft_memset.c			\
+			ft_nothing.c		\
 			ft_realloc.c		\
 
 SRCS_PRINTF =	ft_printf.c			\
@@ -123,9 +120,6 @@ all: $(BIN_DIR) $(NAME)
 
 debug:
 	$(MAKE) MODE=debug
-
-32:
-	$(MAKE) MODE=x86_32
 
 $(BIN_DIR):
 		mkdir -p $(BIN_DIR)

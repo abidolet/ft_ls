@@ -1,5 +1,5 @@
 #include "ft_ls.h"
-#include "parsing.h"
+#include "parsing_bonus.h"
 
 static void	parse_args(char *arg, t_data *data)
 {
@@ -7,10 +7,10 @@ static void	parse_args(char *arg, t_data *data)
 	t_list		*new_node = NULL;
 	t_info		*info;
 
-	if (stat(arg, &st) == -1)
+	if (lstat(arg, &st) == -1)
 	{
 		ft_dprintf(2, "ft_ls: cannot access '%s': No such file or directory\n", arg);
-		data->exit_code = 1;
+		data->exit_code = 2;
 	}
 	else if (S_ISREG(st.st_mode))
 	{
@@ -46,5 +46,20 @@ void	parse(int argc, char **argv, t_data *data)
 		{
 			parse_options(argv[i] + 1, &data->options);
 		}
+	}
+
+	if (data->paths == NULL && data->files == NULL
+		&& data->exit_code == 0)
+	{
+		parse_args(".", data);
+	}
+
+	if (data->options & NO_SORT)
+	{
+		data->options &= ~TIME;
+		data->options &= ~UTIME;
+		data->options &= ~LONG;
+		data->options &= ~GLONG;
+		data->options |= ALL;
 	}
 }

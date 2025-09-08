@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_nothing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abidolet <abidolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 23:10:36 by abidolet          #+#    #+#             */
-/*   Updated: 2025/09/05 14:15:18 by abidolet         ###   ########.fr       */
+/*   Created: 2025/09/04 22:12:28 by abidolet          #+#    #+#             */
+/*   Updated: 2025/09/04 22:12:31 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/lst.h"
-
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+void	ft_nothing(void *ptr)
 {
-	if (f)
-	{
-		while (lst)
-		{
-			f(lst->content);
-			lst = lst->next;
-		}
-	}
+	(void)ptr;
 }

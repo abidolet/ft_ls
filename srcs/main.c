@@ -1,4 +1,5 @@
 #include "ft_ls.h"
+#include "parsing_bonus.h"
 
 int	main(int argc, char **argv)
 {

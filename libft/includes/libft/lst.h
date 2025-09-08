@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 21:58:44 by abidolet          #+#    #+#             */
-/*   Updated: 2025/07/08 00:09:10 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/09/05 14:15:46 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstsort(t_list *lst, int (*cmp)(void *, void *));
 void	ft_lstreverse(t_list **lst);
 void	ft_lstremove_if(t_list **lst, int (*cmp)(), void (*free_fct)(void *));
+t_list	*ft_lstmerge(t_list *a, t_list *b);
 
 #endif

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-make || exit 1
+make bonus || exit 1
 export LC_ALL=C
 clear
 
-g_options=('a' 'r' 'l' 't' 'R')
+g_options=('a' 'r' 'l' 't' 'R' 'g' 'd' 'u' 'f')
 g_flags="valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --track-fds=yes"
 g_flags=""
 
@@ -32,7 +32,7 @@ generate_options()
 }
 
 g_ret=0
-g_dir=tester/logs
+g_dir=tester/logs_bonus
 
 rm -rf $g_dir
 mkdir -p $g_dir
@@ -51,7 +51,7 @@ n()
 
 	echo "Testing: $@"
 
-	$g_flags ./ft_ls "$@" 2>>$g_dir/valgrind.txt > $dir/ft_ls.txt
+	$g_flags ./ft_ls_bonus "$@" 2>>$g_dir/valgrind.txt > $dir/ft_ls.txt
 	local ft_ls_ret=$?
 
 	ls -1 "$@" 2>/dev/null > $dir/ls.txt

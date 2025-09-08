@@ -1,8 +1,9 @@
 NAME := ft_ls
 LIBFT_AUTHORIZED := $(shell if [ -d libft ]; then echo 1; else echo 0; fi)
-MODE ?= release
+MODE ?= mandatory
+BONUS ?= 0
 
-MACRO_DEF = -D LIBFT_AUTHORIZED=$(LIBFT_AUTHORIZED) -D EXEC_NAME=\"$(NAME)\"
+MACRO_DEF = -D LIBFT_AUTHORIZED=$(LIBFT_AUTHORIZED) -D EXEC_NAME=\"$(NAME)\" -D BONUS=$(BONUS)
 INCLUDES = -Iincludes
 
 ifeq ($(LIBFT_AUTHORIZED), 1)
@@ -24,6 +25,12 @@ SRCS =	main.c			\
 		parse.c			\
 		parse_options.c	\
 		run.c			\
+		sort.c			\
+
+ifeq ($(BONUS), 1)
+	NAME = ft_ls_bonus
+	SRCS +=	parse_color_bonus.c
+endif
 
 BIN_DIR = .bin-$(MODE)
 OBJS = $(addprefix $(BIN_DIR)/, $(SRCS:.c=.o))
@@ -36,23 +43,27 @@ GREEN 	= \033[32m
 YELLOW 	= \033[33m
 BLUE 	= \033[34m
 
-all:
-	$(MAKE) libft
-	$(MAKE) $(NAME)
+all: $(NAME)
 	printf "$(RESET)"
 
-libft:
-ifeq ($(LIBFT_AUTHORIZED), 1)
-	$(MAKE) -C libft
-endif
+bonus:
+	$(MAKE) MODE=bonus BONUS=1 all
 
 debug:
 	$(MAKE) MODE=debug all
 
+debugb:
+	$(MAKE) MODE=debug BONUS=1 all
+
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
-$(NAME): $(OBJS)
+$(LIBFT_LIB):
+ifeq ($(LIBFT_AUTHORIZED), 1)
+	$(MAKE) -C libft
+endif
+
+$(NAME): $(OBJS) $(LIBFT_LIB)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $@
 
 $(BIN_DIR)/%.o: %.c Makefile | $(BIN_DIR)
@@ -63,14 +74,14 @@ clean:
 ifeq ($(LIBFT_AUTHORIZED), 1)
 	$(MAKE) -C libft clean
 endif
-	rm -rf .bin-release .bin-debug
+	rm -rf .bin-*
 
 fclean:
 ifeq ($(LIBFT_AUTHORIZED), 1)
 	$(MAKE) -C libft fclean
 endif
-	rm -rf .bin-release .bin-debug
-	rm -f $(NAME)
+	rm -rf .bin-*
+	rm -f ft_ls ft_ls_bonus
 
 re: fclean all
 
