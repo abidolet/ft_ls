@@ -10,18 +10,67 @@
 #include <stdlib.h>
 #include <string.h>
 
-void	print_link(const char *path, const char *name)
-{
-	char	full_path[PATH_MAX];
-	snprintf(full_path, sizeof(full_path), "%s/%s", path, name);
+#if 1
 
+char	*get_color(const char *path)
+{
+	static char	res[16];
+	char	*ls_colors = DEFAULT_LS_COLORS;
+
+	struct stat	st;
+	if (lstat(path, &st) == -1)
+	{
+		return ("");
+	}
+
+	while (ls_colors)
+	{
+		if ((ft_strncmp(ls_colors, "di=", 3) == 0 && S_ISDIR(st.st_mode))
+			|| (ft_strncmp(ls_colors, "ln=", 3) == 0 && S_ISLNK(st.st_mode))
+			|| (ft_strncmp(ls_colors, "ex=", 3) == 0 && S_ISREG(st.st_mode) && (st.st_mode & S_IXUSR))
+			|| (ft_strncmp(ls_colors, "ow=", 3) == 0 && S_ISDIR(st.st_mode) && (st.st_mode & S_IWOTH) && !(st.st_mode & S_ISVTX)))
+		{
+			const char *start = ls_colors + 3;
+			const char *end = ft_strchr(start, ':');
+			size_t len = end ? (size_t)(end - start) : strlen(start);
+			if (len > sizeof(res) - 6)
+				len = sizeof(res) - 6;
+			strcpy(res, "\033[");
+			strncat(res, start, len);
+			strcat(res, "m");
+			return (res);
+		}
+
+		if (ft_strchr(ls_colors, ':') == NULL)
+		{
+			break ;
+		}
+		ls_colors = ft_strchr(ls_colors, ':') + 1;
+	}
+
+	return ("");
+}
+
+# define PRINT(options, path, fmt, ...) \
+	((options & COLOR) \
+		? ft_printf("%s" fmt "%s", get_color(path), __VA_ARGS__, RESET) \
+		: ft_printf(fmt, __VA_ARGS__))
+#else
+
+# define PRINT(options, path, ...) ft_printf(__VA_ARGS__)
+
+#endif
+
+void	print_link(int options, const char *path, const char *name)
+{
+	(void)options;
 	char	link_target[PATH_MAX];
-	ssize_t	len = readlink(full_path, link_target, sizeof(link_target) - 1);
-	
+	ssize_t	len = readlink(path, link_target, sizeof(link_target) - 1);
+
 	if (len != -1)
 	{
 		link_target[len] = '\0';
-		ft_printf("%s -> %s\n", name, link_target);
+		PRINT(options, path, "%s -> %s\n", name, link_target);
 	}
 }
 
@@ -122,13 +171,12 @@ void print_modification_time(struct stat *st, int options)
 long	calculate_total_blocks(t_list *files)
 {
 	long	total = 0;
-	t_list	*current = files;
 
-	while (current)
+	while (files)
 	{
-		t_info *info = current->content;
+		t_info *info = files->content;
 		total += info->st.st_blocks;
-		current = current->next;
+		files = files->next;
 	}
 
 	return (total / 2);
@@ -182,25 +230,24 @@ void	get_files(t_data *data, t_list **to_list, DIR *dir, const char *path)
 void	calculate_padding(t_data *data, t_list *to_list)
 {
 	int		size;
-	t_list	*tmp = to_list;
 	data->padding_links = 0;
 	data->padding_size = 0;
 
-	while (tmp)
+	while (to_list)
 	{
-		size = count_digits(((t_info *)tmp->content)->st.st_nlink);
+		size = count_digits(((t_info *)to_list->content)->st.st_nlink);
 		if (size > data->padding_links)
 		{
 			data->padding_links = size;
 		}
 
-		size = count_digits(((t_info *)tmp->content)->st.st_size);
+		size = count_digits(((t_info *)to_list->content)->st.st_size);
 		if (size > data->padding_size)
 		{
 			data->padding_size = size;
 		}
 
-		tmp = tmp->next;
+		to_list = to_list->next;
 	}
 }
 
@@ -212,28 +259,29 @@ void	print(t_data *data, t_list *to_list, const char *path)
 		calculate_padding(data, to_list);
 	}
 
-	t_list	*tmp = to_list;
-	while (tmp)
+	while (to_list)
 	{
-		t_info	*info = tmp->content;
+		t_info	*info = to_list->content;
 
 		if (data->options & LONG || data->options & GLONG)
 		{
 			print_long_format(info->st, data->padding_links, data->padding_size, data->options);
 		}
 
-		
+		char	full_path[PATH_MAX];
+		snprintf(full_path, sizeof(full_path), "%s/%s", path, info->name);
+
 		if ((data->options & LONG || data->options & GLONG)
-		&& S_ISLNK(info->st.st_mode))
+			&& S_ISLNK(info->st.st_mode))
 		{
-			print_link(path, info->name);
+			print_link(data->options, full_path, info->name);
 		}
 		else
 		{
-			ft_printf("%s\n", info->name);
+			PRINT(data->options, full_path, "%s\n", info->name);
 		}
-		
-		tmp = tmp->next;
+
+		to_list = to_list->next;
 	}
 }
 
@@ -241,7 +289,7 @@ void	print_header(t_data *data, const char *path)
 {
 	static bool	first_call = true;
 
-	if (ft_lstsize(data->paths) > 1 || data->options & RECURSIVE)
+	if (ft_lstsize(data->paths) > 1 || data->exit_code != 0 || data->options & RECURSIVE)
 	{
 		if (!first_call)
 		{

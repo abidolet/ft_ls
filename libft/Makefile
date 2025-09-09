@@ -5,7 +5,7 @@ BIN_DIR = .bin-$(MODE)
 INCLUDES = -Iincludes
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -Iincludes -MD $(INCLUDES)
+CFLAGS = -Wall -Werror -Wextra -Iincludes -MD $(INCLUDES) -g3
 
 ifeq ($(MODE), debug)
 	CFLAGS += -g3

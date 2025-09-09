@@ -2,7 +2,7 @@
 #include "libft.h"
 #include <stdio.h>
 
-void	handle_result(int found, e_color color, int *options, const char *option, t_color_map color_map[], size_t map_size)
+void	handle_result(int found, e_color color, int *options, const char *option, t_color_map color_map[], size_t size)
 {
 	if (found == 1)
 	{
@@ -24,12 +24,13 @@ void	handle_result(int found, e_color color, int *options, const char *option, t
 	{
 		ft_dprintf(2, (found > 1 ? AMBIGUOUS_ARGUMENT_MSG : INVALID_ARGUMENT_MSG), option, "--color");
 
-		for (size_t i = 0; i < map_size; i++)
+		for (size_t i = 0; i < size; i++)
 		{
 			ft_dprintf(2, "  - ‘%s’", color_map[i].arg1);
 			ft_dprintf(2, ", ‘%s’", color_map[i].arg2);
 			ft_dprintf(2, ", ‘%s’\n", color_map[i].arg3);
 		}
+
 		ft_dprintf(2, TRY_MSG);
 		exit(1);
 	}
@@ -37,9 +38,9 @@ void	handle_result(int found, e_color color, int *options, const char *option, t
 
 void	parse_color(char *arg, int *options)
 {
-	const char	*argument = "-color=";
+	const char	*argument = "color";
 
-	if (ft_strncmp(arg, argument, ft_strlen(argument)) == 0)
+	if (ft_strncmp(arg, argument, ft_strchr(arg, '=') - arg - 1) == 0)
 	{
 		const char	*option = ft_strchr(arg, '=') + 1;
 		t_color_map color_map[] =
@@ -64,12 +65,11 @@ void	parse_color(char *arg, int *options)
 			}
 		}
 
-		handle_result(found, color, options, option, color_map,
-			sizeof(color_map) / sizeof(color_map[0]));
+		handle_result(found, color, options, option, color_map, sizeof(color_map) / sizeof(color_map[0]));
 	}
 	else
 	{
-		ft_dprintf(2, INVALID_OPTION_MSG, *arg);
+		ft_dprintf(2, UNRECOGNIZED_OPTION_MSG, arg);
 		exit(2);
 	}
 }

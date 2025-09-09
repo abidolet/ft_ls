@@ -1,7 +1,7 @@
 NAME := ft_ls
 LIBFT_AUTHORIZED := $(shell if [ -d libft ]; then echo 1; else echo 0; fi)
 MODE ?= mandatory
-BONUS ?= 0
+BONUS := $(if $(filter bonus,$(MODE)),1,0)
 
 MACRO_DEF = -D LIBFT_AUTHORIZED=$(LIBFT_AUTHORIZED) -D EXEC_NAME=\"$(NAME)\" -D BONUS=$(BONUS)
 INCLUDES = -Iincludes
@@ -47,19 +47,19 @@ all: $(NAME)
 	printf "$(RESET)"
 
 bonus:
-	$(MAKE) MODE=bonus BONUS=1 all
+	$(MAKE) MODE=bonus
 
 debug:
-	$(MAKE) MODE=debug all
+	$(MAKE) MODE=debug
 
 debugb:
-	$(MAKE) MODE=debug BONUS=1 all
+	$(MAKE) MODE=debug BONUS=1
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
-$(LIBFT_LIB):
 ifeq ($(LIBFT_AUTHORIZED), 1)
+$(LIBFT_LIB):
 	$(MAKE) -C libft
 endif
 

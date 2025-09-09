@@ -52,7 +52,7 @@ static e_option get_option_gnu(const char *option_name)
 	if (nb_options > 1)
 	{
 		dprintf(2, AMBIGUOUS_OPTION_MSG, option_name);
-		for (size_t i = 0; option_map[i].gnu_form; i++)
+		for (size_t i = 0; i < sizeof(option_map) / sizeof(option_map[0]); i++)
 		{
 			if (option_map[i].selected)
 			{
@@ -114,7 +114,7 @@ void	parse_options(char *arg, int *options)
 	#if BONUS
 	else if (ft_strchr(arg, '='))
 	{
-		parse_color(arg, options);
+		parse_color(arg + 1, options);
 	}
 	#endif
 
